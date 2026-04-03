@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+ # Mahasiswa harus lengkapi konfigurasi berikut:
+
+ wordpress:
+   image: wordpress
+   ports:
+     - "8000:80"
+   environment:
+     WORDPRESS_DB_HOST: mysql:3306
+     WORDPRESS_DB_NAME: wpdb
+     WORDPRESS_DB_USER: wpuser
+     WORDPRESS_DB_PASSWORD: wppass
+   depends_on:
+     - mysql
+     - redis
+   volumes:
+     - wp-data:/var/www/html
+
+ mysql:
+   image: mysql:5.7
+   environment:
+     MYSQL_ROOT_PASSWORD: rootpass
+     MYSQL_DATABASE: wpdb
+     MYSQL_USER: wpuser
+     MYSQL_PASSWORD: wppass
+   volumes:
+     - db-data:/var/lib/mysql
+
+ redis:
+   image: redis:alpine
+   restart: always
+
+volumes:
+ wp-data:
+ db-data:
+
+networks:
+ wp-networks:
